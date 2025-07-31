@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thomas Conway - Portfolio</title>
     <style>
-        /* Load Apple's SF Pro font */
         @import url('https://fonts.cdnfonts.com/css/sf-pro-display');
 
         * {
@@ -16,41 +15,110 @@
 
         :root {
             --primary-glow: #00ff88;
+            --secondary-glow: #ff0080;
+            --accent-glow: #8000ff;
+            --tertiary-glow: #00d4ff;
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #151520;
+            --bg-card: rgba(255, 255, 255, 0.08);
             --text-primary: #ffffff;
             --text-secondary: #b0b8c4;
             --neon-border: 2px solid var(--primary-glow);
+            --neon-shadow: 0 0 10px var(--primary-glow), 0 0 20px var(--primary-glow), 0 0 30px var(--primary-glow);
         }
 
         body {
-            background: #0a0a0f; /* Solid background to eliminate gradient issues */
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 30%, #16213e 60%, #0f3460 100%);
             color: var(--text-primary);
             font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
             overflow-x: hidden;
             min-height: 100vh;
+            position: relative;
             z-index: 0;
         }
 
-        /* Removed complex backgrounds and animations */
-        body::before, .matrix-bg {
-            display: none; /* Temporarily disable to ensure content visibility */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 255, 136, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 0, 128, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+            animation: breathe 8s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.02); }
+        }
+
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .matrix-column {
+            position: absolute;
+            color: var(--primary-glow);
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            opacity: 0.1;
+            animation: matrix-rain 8s linear infinite;
+        }
+
+        @keyframes matrix-rain {
+            0% { transform: translateY(-100vh); opacity: 0; }
+            10% { opacity: 0.2; }
+            90% { opacity: 0.2; }
+            100% { transform: translateY(100vh); opacity: 0; }
         }
 
         header {
             background: rgba(10, 10, 15, 0.9);
             border: var(--neon-border);
+            box-shadow: var(--neon-shadow);
+            clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
             padding: 50px 20px;
             text-align: center;
             position: relative;
             z-index: 10;
+            animation: fadeInUp 1s ease-out;
         }
 
         header h1 {
             font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 4em;
             font-weight: 900;
-            color: var(--primary-glow);
-            text-transform: uppercase;
+            background: linear-gradient(45deg, var(--primary-glow), var(--secondary-glow));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-shift 4s ease-in-out infinite, text-glow 3s ease-in-out infinite;
             letter-spacing: 0.1em;
+            text-transform: uppercase;
+            z-index: 11;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes text-glow {
+            0%, 100% { text-shadow: 0 0 10px var(--primary-glow); }
+            50% { text-shadow: 0 0 15px var(--secondary-glow); }
         }
 
         .donation-button {
@@ -67,20 +135,30 @@
             text-transform: uppercase;
             text-decoration: none;
             transition: all 0.3s ease;
-            z-index: 10;
+            box-shadow: 0 0 10px var(--primary-glow);
+            animation: pulse 2s ease-in-out infinite;
+            z-index: 11;
         }
 
         .donation-button:hover {
             background: var(--primary-glow);
-            color: #0a0a0f;
+            color: var(--bg-primary);
+            box-shadow: 0 0 20px var(--primary-glow);
             transform: translateY(-5px);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         #intro {
             text-align: center;
             padding: 120px 20px;
             background: rgba(10, 10, 15, 0.5);
+            position: relative;
             z-index: 10;
+            animation: fadeInUp 1.2s ease-out 0.2s both;
         }
 
         #intro h2 {
@@ -89,10 +167,13 @@
             font-weight: 700;
             margin-bottom: 40px;
             color: var(--primary-glow);
+            animation: text-glow 3s ease-in-out infinite;
+            z-index: 11;
         }
 
         #intro h2 .highlight {
-            color: #ff0080; /* Secondary glow as highlight */
+            color: var(--secondary-glow);
+            animation: pulse 2s ease-in-out infinite;
         }
 
         .role-subtitle {
@@ -103,11 +184,12 @@
             font-weight: 400;
             letter-spacing: 0.1em;
             text-transform: uppercase;
+            z-index: 11;
         }
 
         .section-divider {
             height: 2px;
-            background: var(--primary-glow);
+            background: linear-gradient(90deg, transparent, var(--primary-glow), transparent);
             width: 80%;
             max-width: 800px;
             margin: 60px auto;
@@ -118,6 +200,7 @@
         section {
             margin: 60px 0;
             padding: 0 20px;
+            position: relative;
             z-index: 10;
         }
 
@@ -128,6 +211,8 @@
             text-align: center;
             margin-bottom: 60px;
             color: var(--primary-glow);
+            animation: text-glow 4s ease-in-out infinite;
+            z-index: 11;
         }
 
         .about-content {
@@ -143,12 +228,18 @@
             z-index: 10;
         }
 
+        .about-content:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
         .about-content p {
             font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 1.3em;
             line-height: 1.9;
             color: var(--text-secondary);
             flex: 1;
+            z-index: 11;
         }
 
         .photo-placeholder {
@@ -159,23 +250,32 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 10;
+            z-index: 11;
         }
 
         .photo-frame {
             width: 100%;
             height: 100%;
             position: relative;
+            transform-style: preserve-3d;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
+            25% { transform: translateY(-10px) rotateX(5deg) rotateY(5deg); }
+            75% { transform: translateY(10px) rotateX(-5deg) rotateY(-5deg); }
         }
 
         .photo-inner {
             width: 100%;
             height: 100%;
-            background: rgba(0, 255, 136, 0.1);
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(255, 0, 128, 0.1));
             border-radius: 50%;
             overflow: hidden;
             border: 3px solid var(--primary-glow);
-            z-index: 10;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+            z-index: 11;
         }
 
         .photo-content {
@@ -192,14 +292,20 @@
             justify-content: center;
             overflow: hidden;
             border: 2px solid rgba(0, 255, 136, 0.3);
-            z-index: 10;
+            z-index: 11;
         }
 
-        .photo-content video {
+        .photo-content img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             border-radius: 50%;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         #project-list {
@@ -214,10 +320,18 @@
         .project-card {
             background: rgba(10, 10, 15, 0.8);
             border: var(--neon-border);
+            box-shadow: var(--neon-shadow);
+            clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
             padding: 40px;
             text-align: center;
+            transition: all 0.3s ease;
             position: relative;
             z-index: 10;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 20px var(--primary-glow);
         }
 
         .project-card a {
@@ -234,11 +348,27 @@
         }
 
         .project-card a:hover {
-            color: #ff0080;
+            color: var(--secondary-glow);
             background: rgba(255, 0, 128, 0.1);
+            border-color: var(--secondary-glow);
         }
 
-        /* Minimal responsive design */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 6px;
+            background: var(--primary-glow);
+            z-index: 10;
+            transition: width 0.1s ease;
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         @media (max-width: 768px) {
             .about-content {
                 flex-direction: column;
@@ -278,6 +408,9 @@
     </style>
 </head>
 <body>
+    <div class="matrix-bg" id="matrix-bg"></div>
+    <div class="scroll-indicator" id="scroll-indicator"></div>
+
     <header>
         <h1>THOMAS CONWAY</h1>
         <a href="https://revolut.me/thomas51jp" class="donation-button" target="_blank">Buy Me a Coffee</a>
@@ -299,9 +432,7 @@
                     <div class="photo-frame">
                         <div class="photo-inner">
                             <div class="photo-content">
-                                <video autoplay loop muted playsinline>
-                                    <source src="Profilephoto.mp4" type="video/mp4">
-                                </video>
+                                <img src="profilephoto.png" alt="Profile Photo">
                             </div>
                         </div>
                     </div>
@@ -332,12 +463,36 @@
             projects.forEach((project, index) => {
                 const projectCard = document.createElement('div');
                 projectCard.className = 'project-card';
+                projectCard.style.animationDelay = `${0.6 + (index * 0.1)}s`;
                 projectCard.innerHTML = `<a href="${project.url}" target="_blank">${project.name}</a>`;
                 projectList.appendChild(projectCard);
             });
         }
 
+        function createMatrixRain() {
+            const matrixBg = document.getElementById('matrix-bg');
+            const characters = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+            for (let i = 0; i < 10; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-column';
+                column.style.left = Math.random() * 100 + '%';
+                column.style.animationDelay = Math.random() * 8 + 's';
+                let text = '';
+                for (let j = 0; j < 20; j++) {
+                    text += characters.charAt(Math.floor(Math.random() * characters.length)) + '<br>';
+                }
+                column.innerHTML = text;
+                matrixBg.appendChild(column);
+            }
+        }
+
+        window.addEventListener('scroll', () => {
+            const scrolled = (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('scroll-indicator').style.width = scrolled + '%';
+        });
+
         displayProjects();
+        createMatrixRain();
     </script>
 </body>
 </html>
